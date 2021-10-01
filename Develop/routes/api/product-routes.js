@@ -10,9 +10,7 @@ const { Product, Category, Tag, ProductTag } = require('../../models');
   // be sure to include its associated Category and Tag data
 router.get('/', async (req, res) => {
   try {
-    const ProductData = await Product.findAll({
-      include: [{model: Category}, {model: Tag}],
-    });
+    const productData = await Product.findAll()
     res.status(200).json(ProductData);
   } catch (err) {
     res.status(500).json(err);
@@ -25,7 +23,7 @@ router.get('/', async (req, res) => {
   router.get('/:id', async (req, res) => {
     try {
       const ProductData = await product.findByPk(req.params.id, {
-        include: [{ model: Category }],
+        include: [{ model: Category, through: Tag, as: 'product_tag' }],
       });
   
       if (!productData) {
@@ -95,7 +93,7 @@ router.put('/:id', (req, res) => {
       // figure out which ones to remove
       const productTagsToRemove = productTags
         .filter(({ tag_id }) => !req.body.tagIds.includes(tag_id))
-        .map(({ id }) => id);
+        // .map(({ id }) => id);
 
       // run both actions
       return Promise.all([

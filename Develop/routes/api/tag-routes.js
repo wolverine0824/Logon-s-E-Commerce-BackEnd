@@ -1,3 +1,4 @@
+//  this is bringing in the express 
 const router = require('express').Router();
 const { Tag, Product, ProductTag } = require('../../models');
 
@@ -7,8 +8,8 @@ const { Tag, Product, ProductTag } = require('../../models');
   // be sure to include its associated Product data
   router.get('/', async (req, res) => {
     try {
-      const TagData = await Tag.findAll({
-        include: [{ model: Product }],
+      const tagData = await Tag.findAll({
+        include: [{ model: Product }, { through: ProductTag }],
       });
       res.status(200).json(TagData);
     } catch (err) {
@@ -20,8 +21,8 @@ const { Tag, Product, ProductTag } = require('../../models');
   // be sure to include its associated Product data
   router.get('/:id', async (req, res) => {
     try {
-      const TagData = await Tag.findByPk(req.params.id, {
-        include: [{model: Product}],
+      const tagData = await Tag.findByPk(req.params.id, {
+        include: [{ model: Product }],
       });
   
       if (!tagData) {
@@ -37,7 +38,7 @@ const { Tag, Product, ProductTag } = require('../../models');
   // create a new tag
 router.post('/', async (req, res) => {
   try {
-    const CategoryData = await Category.create(req.body);
+    const tagData = await Tag.create(req.body);
     res.status(200).json(categoryData);
   } catch (err) {
     res.status(400).json(err);
@@ -47,7 +48,7 @@ router.post('/', async (req, res) => {
 // update a tag's name by its `id` value
 router.put('/:id', async (req, res) => {
   try {
-    const categoryData = await Category.update(req.body, {
+    const tagData = await Tag.update(req.body, {
       where: { id: req.params.id },
   });
   if (!categoryData) {
