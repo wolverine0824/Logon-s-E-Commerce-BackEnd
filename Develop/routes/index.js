@@ -1,8 +1,8 @@
 // this is bringing in the express router module
 const router = require('express').Router();
-const categoryRoutes = require('./category-routes');
-const productRoutes = require('./product-routes');
-const tagRoutes = require('./tag-routes');
+const categoryRoutes = require('./api/category-routes');
+const productRoutes = require('./api/product-routes');
+const tagRoutes = require('./api/tag-routes');
 
 
 // this is bringing in the api router module
